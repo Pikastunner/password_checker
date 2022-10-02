@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+        <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="Project_4.css"/> 
+        <link rel="icon" type="image/x-icon" href="question_mark.ico">
+        <title>Is your password robust in this day and age?</title>
+    </head>
+    <div class="form">
+        <input type="input" class="field" placeholder="Enter and test your password" id="password" required />
+        <label for="password" class="form_label" id="label">Enter and test your password</label>
+    </div>
+    <a class="submit_btn" style="color:grey; text-align:center; text-decoration: none; font-size: 1.2rem;" onclick="find_pass();">Submit</a>
+    <script>
+        function find_pass() {
+            var worst_pass = {'123456': 1, 'password': 2, '12345678': 3, 'qwerty': 4, '123456789': 5, '12345': 6, '1234': 7, '111111': 8, '1234567': 9, 'dragon': 10};
+            var input = document.getElementById('password').value;
+            if (input in worst_pass) {
+                var ranking = worst_pass[input];
+                var superscripts = {1: 'st', 2: 'nd', 3: 'rd'};
+                if (ranking in superscripts) {
+                    var superscript = superscripts[ranking];
+                }
+                else {
+                    var superscript = 'th';
+                }
+                alert(`Password found by dictionary attack and is recorded as the ${ranking}${superscript} most common password`);
+            }
+            else if (input.length < 12) {
+                alert("Your password is too short");
+            }
+            else if (!check_complexity(input)) {
+                alert("Your password is not complex and easy to break");
+            }
+            else {
+                alert("Secure password");
+            }
+        }
+        function check_complexity(password) {
+            if (/^[0-9]+$/.test(password)) {
+                return false;
+            }
+            else if (/(^[aA-zZ]+[0-9]+$)|(^[0-9]+[aA-zZ]+$)/.test(password)) {
+                return false;
+            }
+            else if (/[^!@#$%^&*-]/.test(password)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
+</html>
+
