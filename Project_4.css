@@ -1,10 +1,9 @@
 .field {
-    position: absolute;
     font-family: inherit;
-    left: 35%;
-    top: 48.5%;
-    width: 30%;
+    width: 150%;
     border: 0;
+    position: relative;
+    right: 100px;
     border-bottom: 2px solid gray;
     outline: 0;
     font-size: 1.3rem;
@@ -14,10 +13,10 @@
     transition: border-color 0.2s;
 }
 .form_label {
-    position: absolute;
-    top: 47.5%; 
-    left: 35%;
     display: block;
+    bottom: 27px;
+    right: 100px;
+    position: relative;    
     transition: 0.2s;
     font-size: 1rem;
     color: grey;
@@ -37,10 +36,10 @@
     box-shadow: none;
 }
 .field:focus ~ .form_label {
-    position: absolute;
-    top: 47.5%;
     display: block;
     transition: 0.2s;
+    bottom: 50px;
+    position: relative;
     font-size: 1rem;
     color: #11998e;
     font-weight: 700;
@@ -56,9 +55,9 @@
 .submit_btn {
     border: 2px solid white;
     border-color:grey;
-    position: absolute;
-    bottom: 47%;
-    left: 66%;
+    position: relative;
+    bottom: 60px;
+    left: 260px;
     /*background-color: inherit;*/
     padding: 8px 16px;
     cursor: pointer;
@@ -72,10 +71,10 @@
 
 body {
    font-family: 'Poppins', sans-serif;
-   /*display: flex;
+   display: flex;
    flex-direction: column;
    justify-content: center;
-   align-items: center;*/
+   align-items: center;
    min-height: 100vh;
    background-color: #222222; 
 }
