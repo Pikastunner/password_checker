@@ -6,31 +6,457 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
         <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Space Mono' rel='stylesheet'>
         <link rel="stylesheet" href="Project_4.css"/> 
         <link rel="icon" type="image/x-icon" href="question_mark.ico">
         <title>Is your password robust in this day and age?</title>
-    </head>
-    <div class="form">
-        <input type="input" class="field" placeholder="Enter and test your password" id="password" required />
-        <label for="password" class="form_label" id="label">Enter and test your password</label>
-    </div>
-    <a class="submit_btn" style="color:grey; text-align:center; text-decoration: none; font-size: 1.2rem;" onclick="find_pass();">Submit</a>
+    </head><!--    <body data-spy="scroll" data-target="#myScrollspy"data-bs-smooth-scroll="true">
+       <div class="container">
+            <div class="row">
+                <nav class="col-sm-3" id="myScrollspy">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active">
+                            <a href="#opening" class="section">Overview</a>
+                        </li>
+                        <li>
+                            <a href="#form" class="section">Test</a>
+                        </li>
+                        <li>
+                            <a href="#output" class="section" onclick="has_results();">Results</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        -->
+
+        <div class="navigate">
+            <div class="circle_navigation" id="Section1" onclick="document.getElementById('opening').scrollIntoView()"></div>
+            <div class="circle_navigation" id="Section2" onclick="document.getElementById('form').scrollIntoView()"></div>
+            <div class="circle_navigation" id="Section3" onclick="document.getElementById('output').scrollIntoView()"></div>
+        </div>     
+    
+    <!--28vh-->
+        <div class="all_section example" id="all_section">
+            <div class="opening" id="opening">
+                <h1 id="heading1" style="text-align:left;color: #4DCcbd;"><div style="font-size:2em;font-weight: bold;">What </div>really is a <br><i id="italicword" class="underline" style="color: #ff8484;">bad</i> password</h1>
+                <h2 id="heading2" style="text-align:left;color: #d6fff6;"> A data visualisation tool <br>to provide insight to your passwords</h2>
+                <div id="typedtext" class="typewriter" style="text-align:center; font-size:1.5vh; color: #d6fff6;" style="color:black;text-align: center;">Scroll to find out if your password is bad</div>
+                <!-- Code typerwriting effect -> <div id="typedtext" style="text-align:center; font-size:1.5vh; color: #d6fff6;"></div> -->
+                <a id="arrow0" href="#form"style="color: white;" ></a>
+            </div>
+            <div class="form" id="form">
+                <div class="title" style="color:grey; text-align:left;">This site is being hosted on github pages and no data is being collected. <br>
+                    Feel free to type anything you wish. <br>For more information on this, you can visit <br>
+                    <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages" id="link" target="_blank">
+                        https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages
+                    </a>
+                </div>
+                <div style="font-size: 2em;color: #d6fff6;position: relative;top: 10vh;">Let's get started</div>
+                <input type="password" class="field" placeholder="Enter and test your password" id="password" required />
+                <label for="password" class="form_label" id="label">Enter and test your password</label>
+                <div class="submit_btn" style="color:grey; text-align:center; text-decoration: none; font-size: 1.2rem;" onclick="find_pass();">Submit</div>
+                <a id="arrow1" href="#form" style="color:grey;text-align: center;" hidden ></a>
+            </div>
+            <p hidden="true" id="variable"></p>
+            <!--<h1 id="xmlreq">failed</h1>-->
+            <div id="output" class="output">
+                <p id="result" style="color:black;text-align: center;">Hello world</p> 
+                <p style="color:black;text-align: center;">We data mined a dataset containing a million passwords that were rated the worst</p> 
+                <p style="color:black;text-align: center;">Here's a look at what results we got and how your input was based on our findings</p> 
+                <div class="grid-container">
+                    <canvas class="grid-item" id="chart1" style="width:100%;max-width:700px;"></canvas>
+                    <canvas class="grid-item" id="chart2" style="width:100%;max-width:700px"></canvas> 
+                    <canvas class="grid-item" id="chart3" style="width:100%;max-width:700px;"></canvas> <!--circle chart-->
+                    <canvas class="grid-item" id="chart4" style="width:100%;max-width:700px"></canvas> <!--horizontal bar chart-->
+                </div>
+                <a href="#opening" id="restart" style="text-align: center;" onclick="restart()">Restart</a>
+            </div>
+        </div>
+    </body>
+
     <script>
+        // Horizontal bar chart
+        /*Both uppercase and lowercase only 1st
+        Only lowercase 2nd
+        Uppercase and lowercase then numbers 3rd
+        Only Numbers 4th
+        Words consisting of letters and numbers mixed together 5th
+        Numbers then uppercase and lowercase 6th */
+        var aText = new Array(
+            "Scroll to find out if your password is bad "
+        );
+        var iSpeed = 100; // time delay of print out
+        var iIndex = 0; // start printing array at this posision
+        var iArrLength = aText[0].length; // the length of the text array        
+        var iTextPos = 0; // initialise text position
+        
+        function typewriter() {
+            //var text = document.getElementById("ending").innerHTML.replace(/(<.*?>)/g, "");
+            sContents =  '';
+            //iRow = Math.max(0, iIndex-iScrollAt); NOT SURE WHAT THIS DOES
+            //iRow = 0;
+            var destination = document.getElementById("typedtext");
+        /* while ( iRow < iIndex ) {
+                sContents += aText[iRow] ;//+ '<br/>';  ONLY IF I AM TYPING MORE THAN ONE LINE
+                iRow += 1;
+            }*/
+            //destination.innerHTML = sContents + aText[iIndex].substring(0, iTextPos) + "_";
+            destination.innerHTML =  aText[iIndex].substring(0, iTextPos) + "_";
+
+            if (iTextPos == iArrLength) {
+                iTextPos = 0;
+                iIndex += 1;
+                if ( iIndex != aText.length ) {
+                    iArrLength = aText[iIndex].length;
+                    setTimeout("typewriter()", 500);
+                }
+                else {
+                    repeat();
+                }
+            } 
+            else {
+                iTextPos += 1;
+                setTimeout("typewriter()", iSpeed);
+            }
+        }
+
+        function repeat() {
+            var destination = document.getElementById("typedtext");
+            var stor = destination.innerHTML;
+            var last_letter = stor.slice(-1);
+            if (last_letter != "_") {
+                destination.innerHTML = stor + "_";
+            }
+            else {
+                destination.innerHTML = stor.slice(0, -1);
+            }
+            setTimeout("repeat()", 500);
+        }
+       
+       
+        //setTimeout("typewriter()", 4000);
+
+        document.getElementById("all_section").addEventListener('scroll', function() {
+            var opening = document.getElementById("opening").getBoundingClientRect();
+            var form = document.getElementById("form").getBoundingClientRect();
+            var output = document.getElementById("output").getBoundingClientRect();
+            var all_elements = ["Section1", "Section2", "Section3"];
+        
+            var all_bounds = [opening, form, output];
+            var which_button = 0;
+            var j = 0;
+            for (var i of all_bounds) {
+                if (i.top >= 0 && i.left >= 0 && i.right <=  i.right <= (window.innerWidth || document.documentElement.clientWidth)
+                    && i.bottom <= (window.innerHeight || document.documentElement.clientHeight)) {
+               // window.innerWidth && i.bottom <= window.innerHeight) {
+                    which_button = j;
+                    break;
+                }
+                else {
+                    j += 1;
+                }
+            }
+            if (document.getElementsByClassName("output")[0].style.display === "" && which_button == 2) {
+                //alert(`${which_button} FAILED`);
+                return;
+            }
+            else {
+               // alert(`${which_button} GOOD`);
+                var change_button = all_elements[which_button];
+                //alert(all_elements[which_button]);
+                for (var i of all_elements) {
+                    document.getElementById(i).style.backgroundColor = "#555555";
+                }
+                document.getElementById(change_button).style.backgroundColor = "#ff8484";
+            }
+           // alert(`WORKED ${change_button}`);
+        });
+        document.getElementById("Section1").style.backgroundColor = "#ff8484";
+
+        function has_results() {
+            var id = document.getElementById("output");
+            if (window.getComputedStyle(id).display === "none") {
+                alert("You must submit the form");
+            }
+        }
+
+        function restart() {
+            var num_elements = 1;
+            //document.getElementById("output").style.visibility = "hidden";
+            //document.getElementById("restart").style.visibility = "hidden"; 
+            for (let i = 0 ; i < num_elements; i ++) {
+                var arrow_name = "arrow" + i;
+                document.getElementById(arrow_name).style.display = "none";
+            } 
+            document.getElementById("arrow0").style.display = "block";
+            //document.getElementById("arrow").style.display = "none";
+            //location.reload();
+        }
+
+        restart();
+        function next_item() {
+            document.getElementById("form").removeAttribute("hidden");
+        }
+
+        function getdata() {
+            var req = new XMLHttpRequest();
+            //alert("HAPPEDED1");
+            req.open("GET", "https://edition.cnn.com/", true);
+            req.responseType = "document";
+           // alert("HAPPEDED2");
+            req.onreadystatechange = function() {
+                //alert("HAPPEDED3");
+                if (req.readyState == 4 && req.status == 200) {
+                    document.getElementById("xmlreq").innerHTML = req.responseText; 
+                }
+                else {            
+                    alert("FALED");        
+                }
+            }
+            req.send();
+        }
+        getText('/1000000_passwords.txt');
+        //getdata();
+        /*
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://edition.cnn.com/");
+        xhr.onload = () => {
+            if (xhr.status != 200) { 
+                alert(`Error ${xhr.status}: ${xhr.statusText}`);
+            } else {
+                alert(xhr.response.length);
+            }
+        };
+        xhr.onprogress = (event) => document.getElementById("xmlreq").innerHTML = (event.loaded);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                alert(xhr.responseText);
+            }
+        };
+        xhr.onerror = () => alert("Request failed");
+        xhr.send();
+        */
+
+
+
         function find_pass() {
-            var worst_pass = {'123456': 1, 'password': 2, '12345678': 3, 'qwerty': 4, '123456789': 5, '12345': 6, '1234': 7, '111111': 8, '1234567': 9, 'dragon': 10};
+            //document.getElementById("output").removeAttribute("hidden");
+            document.getElementById("output").style.display = "block";
+            document.getElementById("restart").removeAttribute("hidden");  
+            document.getElementById("arrow1").style.visibility = "visible";
+            //document.getElementById("form").element.style.height = "1000px";
+            var before = performance.now();
+            //var worst_pass = {'123456': 1, 'password': 2, '12345678': 3, 'qwerty': 4, '123456789': 5, '12345': 6, '1234': 7, '111111': 8, '1234567': 9, 'dragon': 10};
+            //return alert(JSON.stringify(worst_pass));
+            var first_letter_circle = {
+                "number" : 0,
+                "uppercase letter" : 0,
+                "lowercase letter" : 0,
+                "symbol": 0
+            }
+            var first_letter = {
+                '0' : 0,
+                '1' : 0,
+                '2' : 0,
+                '3' : 0,
+                '4' : 0,
+                '5' : 0,
+                '6' : 0,
+                '7' : 0,
+                '8' : 0,
+                '9' : 0,
+                'a' : 0, 
+                'b' : 0, 
+                'c' : 0, 
+                'd' : 0, 
+                'e' : 0, 
+                'f' : 0, 
+                'g' : 0, 
+                'h' : 0, 
+                'i' : 0, 
+                'j' : 0, 
+                'k' : 0, 
+                'l' : 0, 
+                'm' : 0, 
+                'n' : 0, 
+                'o' : 0, 
+                'p' : 0, 
+                'q' : 0, 
+                'r' : 0, 
+                's' : 0, 
+                't' : 0, 
+                'u' : 0, 
+                'v' : 0, 
+                'w' : 0, 
+                'x' : 0, 
+                'y' : 0, 
+                'z' : 0,
+                'symbol' : 0
+            }
+            // Pattern 1 
+            // Only lowercase letters
+            // Pattern 2
+            // Only uppercase letters
+            // Pattern 3
+            // Both lowercase and uppercase letters no numbers
+            // Pattern 4
+            // Only Numbers
+            // Pattern 5
+            // Letters then numbers
+            // Pattern 6
+            // Numbers then letters
+            // Pattern 7 (example would be using numbers to replace letters such as g00d or prof35510nal)
+            // Letters then numbers then letters or numbers then letters then numbers
+            // Pattern 8 
+            // Contains symbol and letters
+            // Pattern 9
+            // Contains symbols and numbers
+            // Pattern 10 TODO (CHANGED TO LETTER NUMBER SYMBOL)
+            // Contains symbols, numbers and letters (letters numbers, symbol or letters, symbol, numbers)
+            // Pattern 11
+            // Contains only symbols
+            // Pattern 12
+            // A string with the same character
+            // Pattern 13 
+            // A string with repeated words
+            // Pattern 14
+            // other patterns are considered complex
+            /*var regex_pattern = {
+                '^[a-z]+$': 0,
+                '^[A-Z]+$': 0,
+                '^[aA-zZ]+$': 0,
+                '^[0-9]+$': 0,
+                '^[aA-zZ]+[0-9]+$': 0,
+                '^[0-9]+[aA-zZ]+$': 0,
+                '(.*[aA-zZ]+[0-9]+[aA-zZ]+.*|.*[0-9]+[aA-zZ]+[0-9]+.*)': 0,
+                '(^[aA-zZ]+[^aA-zZ0-9]+$|^[^aA-zZ0-9]+[aA-zZ]+$)': 0,
+                '(^[0-9]+[^aA-zZ0-9]+$|^[^aA-zZ0-9]+[0-9]+$)': 0,
+                '^[aA-zZ]+[0-9]+[^aA-zZ0-9]+$': 0,
+                //'[^(^[0-9]*[aA-zZ]*$|^[aA-zZ]*[0-9]*$)]': 0, FAILED
+                '^[^aA-zZ0-9]+$' : 0,
+                '^(.)\1{1,}$' : 0,
+                '(\D+).*\1': 0,
+                //'[aA-zZ]+[0-9]+': 0,
+                //'^.*[^a-zA-Z0-9]+.*$': 0,
+                'complex': 0
+            }*/
+            var regex_pattern = {
+                '^[aA-zZ]+$': 0,
+                '^[a-z]+$': 0,
+                '^[aA-zZ]+[0-9]+$': 0,
+                '^[0-9]+$': 0,
+                '(^[aA-zZ]+[0-9]+[aA-zZ]+$|^[0-9]+[aA-zZ]+[0-9]+$)': 0
+            }
+           // debugger;
+            var all_string_length = 0;
+            var is_capital = 0;
             var input = document.getElementById('password').value;
+            var worst_pass = new Object(); 
+            var lengths = new Object();
+            //var all_data =  getText('/1000000_passwords.txt');
+           // return alert(document.getElementById('variable').value);
+            //return;
+            var string_array = (document.getElementById('variable').value).split('\n');
+            var len_arr = string_array.length;
+            var failed_list = new Object();
+            //alert(string_array.length);
+            //return alert(string_array[1]);
+            for (var i = 0; i < len_arr - 1; i ++) {
+                var passwords = string_array[i].trim(); 
+                worst_pass[passwords] = i;
+                all_string_length += passwords.length;
+                if (passwords.length in lengths) {
+                    lengths[passwords.length] += 1;
+                }
+                else {
+                    lengths[passwords.length] = 1;
+                }
+                var notcomplex = false;
+                for (var key in regex_pattern) {
+                    var pattern = new RegExp(key);
+                    if (pattern.test(passwords)) {
+                        regex_pattern[key] += 1;
+                        notcomplex = true;
+                    }
+                }
+                /*if (notcomplex == false) {
+                    regex_pattern['complex'] += 1;
+                }*/
+                if (passwords[0].toLowerCase() in first_letter) {
+                    if (passwords[0] == passwords[0].toUpperCase() && !(/^[0-9]/.test(passwords[0]))) {
+                        var value = first_letter[passwords[0].toLowerCase()];
+                        first_letter[passwords[0].toLowerCase()] = value + 1;
+                        first_letter_circle["uppercase letter"] += 1;
+                        is_capital += 1;
+                    }
+                    else {
+                        if (/^[0-9]/.test(passwords[0])) {
+                            first_letter_circle["number"] += 1;
+                        }
+                        else {
+                            first_letter_circle["lowercase letter"] += 1;
+                        }
+                        var value = first_letter[passwords[0]];
+                        first_letter[passwords[0]] = value + 1;
+                    }
+                }
+                else {
+                    var value = first_letter['symbol'];
+                    first_letter['symbol'] = value + 1;
+                    first_letter_circle["symbol"] += 1;
+                   // first_letter[passwords[0]] = 1;
+                }
+
+            }
+            //alert(regex_pattern);
+            debugger;
+            var avg_capital  = is_capital / len_arr;
+            var avg_string_len = all_string_length / len_arr; 
+            var highest_freq = 0;
+            var highest_freq_char = new Array();
+            for (var key in first_letter) {
+                if (first_letter[key] == highest_freq) {
+                    highest_freq_char.push(key);
+                }
+                else if (first_letter[key] > highest_freq) {
+                    highest_freq = first_letter[key];
+                    highest_freq_char.length = 0;
+                    highest_freq_char.push(key);
+                }
+            }
+            var percent_highest_freq = highest_freq / len_arr;
+            //alert(`Average capital letter is ${avg_capital}.\n Average string length is ${avg_string_len}.\n Highest frequency character is ${highest_freq_char} at a frequency of ${percent_highest_freq}.\n The frequency of the input's first character ${input[0].toLowerCase()} is ${first_letter[input[0].toLowerCase()]}`);
+            /*alert(avg_string_len);
+            alert(percent_highest_freq);
+            alert(highest_freq_char);
+            alert(input[0].toLowerCase());
+            alert(first_letter[input[0].toLowerCase()]);*/
+            //return alert(JSON.stringify(worst_pass));
             if (input in worst_pass) {
-                var ranking = worst_pass[input];
+                var ranking = worst_pass[input] + 1;
                 var superscripts = {1: 'st', 2: 'nd', 3: 'rd'};
-                if (ranking in superscripts) {
+                if (ranking == 1) {
+                    ranking = '';
+                    superscript = '';
+                }
+                else if (ranking in superscripts) {
                     var superscript = superscripts[ranking];
+                    ranking  = " " + ranking;
                 }
                 else {
                     var superscript = 'th';
+                    ranking  = " " + ranking;
                 }
-                alert(`Password found by dictionary attack and is recorded as the ${ranking}${superscript} most common password`);
+                var after = performance.now();
+                var string = `The password ${input} was found by dictionary attack in ${after - before} milliseconds and is recorded as the${ranking}${superscript} most common password`;
+                document.getElementById("result").innerHTML = string;
+                //alert(`Password found by dictionary attack in ${after - before} milliseconds and is recorded as the${ranking}${superscript} most common password`);
             }
-            else if (input.length < 12) {
+           /* else if (input.length < 12) {
                 alert("Your password is too short");
             }
             else if (!check_complexity(input)) {
@@ -38,7 +464,222 @@
             }
             else {
                 alert("Secure password");
+            }*/
+            document.getElementById('password').value = "";
+            var after = performance.now();
+            var string = `Function is complete in ${after - before} milliseconds`;
+            //alert(string);
+            
+
+   
+            
+            var lenxyValues = [];
+            var lenxValues = [];
+            var lenyValues = [];
+            var circleValues = [];
+            var patternYvalues = [];
+            for (var key in first_letter_circle) {
+                circleValues.push(Number(first_letter_circle[key]));
             }
+
+            for (var key in regex_pattern) {
+
+                patternYvalues.push(Number(regex_pattern[key]));
+            }
+            
+            var labels2 = [];
+            var more_data2 = [];
+            for (var key in lengths) {
+                var stor = {x: Number(key), y: lengths[key]};
+                lenxValues.push(Number(key));
+                lenyValues.push(Number(lengths[key]));
+                lenxyValues.push(stor);
+            }
+            for (var key in first_letter) {
+                //var stor = {x: Number(key), y: first_letter[key]};
+                labels2.push((key));
+                more_data2.push(Number(first_letter[key]));
+            }
+            var patternXvalues = [
+            //"Only lowercase",
+            //"Only uppercase",
+            "Both lowercase and uppercase letters no numbers",
+            "Only lowercase",
+            "Letters then number",
+            "Only Numbers",
+            //"Letters then numbers",
+            //"Numbers then letters",
+            "Letters then numbers then letters or numbers then letters then numbers",
+            //"Numbers then letters",
+            //"Contains symbol and letters",
+            //"Contains symbols and numbers",
+            //"Contains only symbols",
+            //"A string with the same character",
+            //" A string with repeated words",
+            //"complex"
+            ];
+
+
+            debugger;
+            //alert(xyValues);
+            /*var xyValues = [
+            {x:50, y:7},
+            {x:60, y:8},
+            {x:70, y:8},
+            {x:80, y:9},
+            {x:90, y:9},
+            {x:100, y:9},
+            {x:110, y:10},
+            {x:120, y:11},
+            {x:130, y:14},
+            {x:140, y:14},
+            {x:150, y:15}
+            ];*/
+            var backgroundColor = [];
+            for (const x of Array(40).keys()) {
+                if (x == (input.length - 3)) {
+                    backgroundColor.push('rgb(255, 0, 0)');
+                }
+                else {
+                    backgroundColor.push('rgb(0, 0, 255)');
+                }
+            }
+            var backgroundColor = [];
+            // GET THE FIRST LETTER OF THE STRING TODO
+            for (const x of Array(40).keys()) {
+                if (x == (input.length - 3)) {
+                    backgroundColor.push('rgb(255, 0, 0)');
+                }
+                else {
+                    backgroundColor.push('rgb(0, 0, 255)');
+                }
+            }
+            
+            new Chart("chart1", {
+            type: 'bar',
+            data: {
+                labels: lenxValues,
+                datasets: [{
+                label: "Length of password",
+                backgroundColor: backgroundColor,//"rgb(0,0,255)",
+                data: lenyValues              
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Length of most commonly used passwords',
+                    font: {
+                        family: "OCR A Std",
+                        style: "monospace" 
+                    }
+                }
+            }
+            
+                //scales: {
+                //xAxes: [{ticks: {min: 40, max:160}}],
+                //yAxes: [{ticks: {min: 6, max:16}}],
+                //}
+        });
+        new Chart("chart3", {
+            type: 'pie',
+            data: {
+                labels: [
+                "number",
+                "uppercase letter",
+                "lowercase letter",
+                "symbol"
+                ],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: circleValues,
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(0, 255, 0)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'First character of commonly used passwords',
+                }
+            }
+        });
+            new Chart("chart2", {
+            type: 'bar',
+            data: {
+                labels: labels2,
+                datasets: [{
+                label: "Number of words with the first character",
+                backgroundColor: backgroundColor,//"rgb(0,0,255)",
+                data: more_data2             
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'First character of commonly used passwords',
+                    font: {
+                        family: "OCR A Std, monospace"
+                    }
+                }
+            }
+        });
+        new Chart("chart4", {
+            type: 'horizontalBar',
+            data: {
+                labels: patternXvalues,
+                datasets: [{
+                label: "Number of words matching pattern",
+                backgroundColor: backgroundColor,//"rgb(0,0,255)",
+                data: patternYvalues             
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                elements: {
+                    bar: {
+                        borderWidth: 2,
+                    }
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Most common password patterns',
+                    font: {
+                        family: "OCR A Std, monospace"
+                    }
+                }
+            }
+        });
+        Chart.defaults.global.defaultFontColor = "#000000";
+        Chart.defaults.global.defaultFontFamily ="OCR A Std, monospace";
+        
+
+            //debugger;
+
+        }
+        async function getText(file) {
+            var before = performance.now();
+            const myObject = await fetch(file);
+            const myText = await myObject.text();
+            document.getElementById('variable').value = await myText;
+            var after = performance.now();
+            //alert(after - before);
+        }
+        function get_obj() {
+            return fetch('/data.txt')
+            .then(response => response.text())
+            .then(data => console.log(data));
         }
         function check_complexity(password) {
             if (/^[0-9]+$/.test(password)) {
@@ -47,9 +688,9 @@
             else if (/(^[aA-zZ]+[0-9]+$)|(^[0-9]+[aA-zZ]+$)/.test(password)) {
                 return false;
             }
-            else if (/[^!@#$%^&*-]/.test(password)) {
+            /*else if (/[^!@#$%^&*-]/.test(password)) {
                 return false;
-            }
+            }*/
             else {
                 return true;
             }
