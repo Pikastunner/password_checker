@@ -190,7 +190,7 @@ ul.nav {
     text-decoration: none;
 }
 
-#arrow0 {
+.arrow {
     border: solid white;
     border-width: 0 3px 3px 0;
     width: 3px;
@@ -198,6 +198,10 @@ ul.nav {
     padding: 8px;
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
+    margin: auto;
+}
+
+#arrow0 {
     position: relative;
     top: 45vh;
     margin: auto;
@@ -205,16 +209,15 @@ ul.nav {
         hide_about 6.2s;
 }
 
-#arrow0:hover {
+.arrow:hover {
     border-color:  #11998e;
 }
 
 
 #arrow1 {
     position: relative;
-    top: 50vh;
+    top: 75%;
     /*bottom: 8em;*/
-    text-decoration: none;
     border: solid white;
     border-width: 0 3px 3px 0;
     width: 3px;
@@ -230,13 +233,18 @@ ul.nav {
 #link {
     word-break: break-word;
 }
+
+#link:hover {
+    text-decoration: none;
+}
+
 .opening {
     height: 100vh;
     display: block;
     font-family: OCR A Std, monospace;
     overflow: hidden;
     width: 100%;
-    background-image: url('background_img5.jpg'), linear-gradient(to right,black, #18191A,#555555 , #F44336); 
+    background-image: url('background_img5.jpg'), linear-gradient(to right,black, #18191A,#b4b4b4 , #F44336); 
     background-size: cover;
     background-color: grey;
     background-blend-mode: multiply;
@@ -262,9 +270,17 @@ ul.nav {
 }
 @media screen and (min-width: 1000px) {
     .field {
-        width: 65vw;
+        width: 50vw;
+    }
+    .form {
+        background-image: url("side_image3.jpg");
+        background-repeat: no-repeat;
+        background-position: top right;
+        background-size: 37% 100%;
+        background-color: #18191A;
     }
 }
+
 .form_label {
     display: block;
     /*bottom: 50px;*/
@@ -274,7 +290,7 @@ ul.nav {
     font-size: 1rem;
     color: grey;
     top: 31vh;
-    font-size: 1.5rem;
+    font-size: 0.8em;
 }
 .form {
     display: block;
@@ -288,13 +304,14 @@ ul.nav {
     /*overflow: auto;*/
     height: 100vh;
     overflow: hidden;
-    background-image: url('background_img6.jpg');
+    /*
+    background-image: url('background_img3.jpg');
     background-size: cover;
-    background-color: #18191A;
+    background-color: #333333;
     background-blend-mode: multiply;
     /*background-color: #222222;*/
     scroll-snap-align: start;
-    font-size: 2vh;
+    font-size: 1.5vh;
 }
 .output {
     height: 100vh;
@@ -310,9 +327,9 @@ ul.nav {
     color: transparent;
 }
 .field:placeholder-shown ~ .form_label {
-    font-size: 1.1rem;
+    font-size: 1em;
     cursor: text;
-    top: 33.5vh;
+    top: 32.5vh;
 }
 .field:required {
     box-shadow: none;
@@ -325,7 +342,7 @@ ul.nav {
     transition: 0.2s;
     position: relative;
     top: 30.5vh;
-    font-size: 1rem;
+    font-size: 0.8em;
     color: #11998e;
     font-weight: 700;
 }

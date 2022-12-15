@@ -12,6 +12,7 @@
         <link href='https://fonts.googleapis.com/css?family=Space Mono' rel='stylesheet'>
         <link rel="stylesheet" href="Project_4.css"/> 
         <link rel="icon" type="image/x-icon" href="question_mark.ico">
+        
         <title>Is your password robust in this day and age?</title>
     </head><!--    <body data-spy="scroll" data-target="#myScrollspy"data-bs-smooth-scroll="true">
        <div class="container">
@@ -46,20 +47,20 @@
                 <h2 id="heading2" style="text-align:left;color: #d6fff6;"> A data visualisation tool <br>to provide insight to your passwords</h2>
                 <div id="typedtext" class="typewriter" style="text-align:center; font-size:1.5vh; color: #d6fff6;" style="color:black;text-align: center;">Scroll to find out if your password is bad</div>
                 <!-- Code typerwriting effect -> <div id="typedtext" style="text-align:center; font-size:1.5vh; color: #d6fff6;"></div> -->
-                <a id="arrow0" href="#form"style="color: white;" ></a>
+                <a class="arrow" id="arrow0" href="#form"style="color: white;" ></a>
             </div>
             <div class="form" id="form">
                 <div class="title" style="color:grey; text-align:left;">This site is being hosted on github pages and no data is being collected. <br>
-                    Feel free to type anything you wish. <br>For more information on this, you can visit <br>
+                    Feel free to type anything you wish. <br>For more information on this, you can visit
                     <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages" id="link" target="_blank">
-                        https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages
+                        here
                     </a>
                 </div>
-                <div style="font-size: 2em;color: #d6fff6;position: relative;top: 10vh;">Let's get started</div>
+                <div style="font-size: 2em;color: #d6fff6;position: relative;top: 10vh;">Let's get started below</div>
                 <input type="password" class="field" placeholder="Enter and test your password" id="password" required />
                 <label for="password" class="form_label" id="label">Enter and test your password</label>
                 <div class="submit_btn" style="color:grey; text-align:center; text-decoration: none; font-size: 1.2rem;" onclick="find_pass();">Submit</div>
-                <a id="arrow1" href="#form" style="color:grey;text-align: center;" hidden ></a>
+                <a class="arrow" id="arrow1" href="#output" style="color:grey;text-align: center;" hidden ></a>
             </div>
             <p hidden="true" id="variable"></p>
             <!--<h1 id="xmlreq">failed</h1>-->
